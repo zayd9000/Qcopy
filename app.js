@@ -169,3 +169,22 @@ function escapeHtml(str) {
 function escapeJsString(str) {
     return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
 }
+// Native Mobile Share System
+const shareBtn = document.getElementById('share-btn');
+
+if (shareBtn) {
+    shareBtn.addEventListener('click', async () => {
+        const textToShare = resultText.value;
+        if (!textToShare) return;
+
+        if (navigator.share) {
+            try {
+                await navigator.share({ text: textToShare });
+            } catch (err) {
+                console.log("Share menu dismissed:", err);
+            }
+        } else {
+            alert("Sharing isn't supported on this browser. The text is already copied to your clipboard, so you can manually paste it into WhatsApp or Telegram!");
+        }
+    });
+}
