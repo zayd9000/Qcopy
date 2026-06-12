@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Scan & Copy Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <header>
+            <h1>Instant Scan Hub</h1>
+            <p>Snap a photo to instantly copy its text</p>
+        </header>
+
+        <div id="toast" class="toast hidden">📋 Copied to Clipboard!</div>
+
+        <main class="scanner-section">
+            <div class="action-buttons">
+                <button id="start-camera-btn" class="btn primary-btn">📷 Open Camera</button>
+                <label for="file-upload" class="btn secondary-btn">
+                    📁 Upload Image
+                    <input type="file" id="file-upload" accept="image/*" style="display: none;">
+                </label>
+            </div>
+
+            <div id="camera-container" class="camera-container hidden">
+                <video id="video" autoplay playsinline></video>
+                <button id="capture-btn" class="btn capture-btn">⚡ Capture</button>
+            </div>
+
+            <canvas id="canvas" style="display: none;"></canvas>
+
+            <div id="loading-status" class="loading-status hidden">
+                <div class="spinner"></div>
+                <p id="status-text">Reading image data...</p>
+            </div>
+
+            <div id="result-container" class="result-container hidden">
+                <h3>Latest Extraction</h3>
+                <textarea id="result-text" rows="5" placeholder="Extracted text will appear here..."></textarea>
+                <button id="manual-copy-btn" class="btn copy-btn">Copy Text Manually</button>
+            </div>
+        </main>
+
+        <hr class="divider">
+
+        <section class="history-section">
+            <h2>Saved History</h2>
+            <div id="history-list" class="history-list">
+                <p class="empty-message">No scans saved yet.</p>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
