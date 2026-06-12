@@ -65,25 +65,60 @@ fileUpload.addEventListener('change', (e) => {
 });
 
 // Processing Data with Tesseract Engine & Clipboard Writing
-async function processImageOCR(dataUrl) {
+    async function processImageOCR(dataUrl) {
     loadingStatus.classList.remove('hidden');
     resultContainer.classList.add('hidden');
     statusText.textContent = "Initializing Engine...";
 
     try {
-        // Run completely engine locally inside client browser instance
-       const worker = await Tesseract.createWorker(['eng', 'ara']);
+        const worker = await Tesseract.createWorker(['eng', 'ara']);
         statusText.textContent = "Analyzing & Transcribing Text...";
         
         const ret = await worker.recognize(dataUrl);
-        const textResult = ret.data.text.trim();
         await worker.terminate();
 
         loadingStatus.classList.add('hidden');
 
-        if (textResult.length === 0) {
+        // Capture raw paragraph blocks from the OCR engine
+        const paragraphs = ret.data.paragraphs;
+        
+        if (!paragraphs || paragraphs.length === 0) {
             alert("No text detected in this frame. Try again with a clearer picture.");
             return;
+        }
+
+        // Clean up text and join paragraphs with distinct spacing
+        const formattedText = paragraphs
+            .map(p => p.text.trim())
+            .filter(text => text.length > 0)
+            .join('\n\n'); // Forces a clean double line break between paragraphs
+
+        if (formattedText.length === 0) {
+            alert("No readable text found.");
+            return;
+        }
+
+        // Output complete structured result to main text box
+        resultText.value = formattedText;
+        
+        // Smart RTL direction control for text box display
+        resultText.dir = /[\u0600-\u06FF]/.test(formattedText) ? 'rtl' : 'ltr';
+        
+        resultContainer.classList.remove('hidden');
+        
+        // Auto-copy full text to clipboard initially
+        copyTextToClipboard(formattedText);
+
+        // Save entry to Local Storage array
+        saveToHistory(dataUrl, formattedText);
+
+    } catch (error) {
+        loadingStatus.classList.add('hidden');
+        alert("An error occurred during text extraction processing.");
+        console.error(error);
+    }
+}
+
         }
 
         // Output Result & Trigger Copy Event
