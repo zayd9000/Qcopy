@@ -175,23 +175,29 @@ const shareBtn = document.getElementById('share-btn');
 // Native Mobile Share System
 const shareBtn = document.getElementById('share-btn');
 
+// Native Mobile Share System (Safari-Optimized)
+const shareBtn = document.getElementById('share-btn');
+
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
-        // Make sure this matches the variable name of the text box
-        const textToShare = document.getElementById('result-text').value; 
+        // Fetch the value directly inside the event listener so Safari doesn't block it
+        const textToShare = document.getElementById('result-text').value;
+        
         if (!textToShare) {
-            alert("Please scan or enter some text first!");
+            alert("No text detected to share yet!");
             return;
         }
 
         if (navigator.share) {
             try {
-                await navigator.share({ text: textToShare });
+                await navigator.share({
+                    text: textToShare
+                });
             } catch (err) {
-                console.log("Share menu dismissed:", err);
+                console.log("Share sheet dismissed:", err);
             }
         } else {
-            alert("Native sharing isn't supported on this specific browser.");
+            alert("Native sharing isn't supported on this browser. The text is already copied to your clipboard, so you can paste it manually!");
         }
     });
 }
