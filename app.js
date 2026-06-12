@@ -72,7 +72,7 @@ async function processImageOCR(dataUrl) {
 
     try {
         // Run completely engine locally inside client browser instance
-        const worker = await Tesseract.createWorker('eng');
+       const worker = await Tesseract.createWorker(['eng', 'ara']);
         statusText.textContent = "Analyzing & Transcribing Text...";
         
         const ret = await worker.recognize(dataUrl);
