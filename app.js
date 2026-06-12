@@ -172,10 +172,17 @@ function escapeJsString(str) {
 // Native Mobile Share System
 const shareBtn = document.getElementById('share-btn');
 
+// Native Mobile Share System
+const shareBtn = document.getElementById('share-btn');
+
 if (shareBtn) {
     shareBtn.addEventListener('click', async () => {
-        const textToShare = resultText.value;
-        if (!textToShare) return;
+        // Make sure this matches the variable name of the text box
+        const textToShare = document.getElementById('result-text').value; 
+        if (!textToShare) {
+            alert("Please scan or enter some text first!");
+            return;
+        }
 
         if (navigator.share) {
             try {
@@ -184,7 +191,7 @@ if (shareBtn) {
                 console.log("Share menu dismissed:", err);
             }
         } else {
-            alert("Sharing isn't supported on this browser. The text is already copied to your clipboard, so you can manually paste it into WhatsApp or Telegram!");
+            alert("Native sharing isn't supported on this specific browser.");
         }
     });
 }
